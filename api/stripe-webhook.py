@@ -1,11 +1,13 @@
-def handler(request, response):
-    if request.method != "POST":
-        return response.status(405).send("Method Not Allowed")
+from http.server import BaseHTTPRequestHandler
+import json
 
-    try:
-        payload = request.body
-        print("✅ Webhook received:", payload)
-        return response.status(200).json({ "status": "success" })
-    except Exception as e:
-        print("❌ Webhook error:", str(e))
-        return response.status(500).json({ "error": "Internal Server Error" })
+class handler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length)
+        print("✅ Webhook received:", body.decode('utf-8'))
+
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps({ "status": "success" }).encode())
