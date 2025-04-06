@@ -1,0 +1,15 @@
+{
+  "builds": [
+    {
+      "src": "neo_license_frontend_fixed/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "neo_license_frontend_fixed/dist/index.html"
+    }
+  ]
+}
